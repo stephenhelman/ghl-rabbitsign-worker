@@ -1,0 +1,15 @@
+{
+  "name": "ghl-rabbitsign-worker",
+  "main": "src/index.js",
+  "compatibility_date": "2025-10-29",
+  "kv_namespaces": [{ "binding": "MAP_KV", "id": "" }],
+  "vars": {
+    "GHL_BASE_URL": "https://services.leadconnectorhq.com"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "dev": {
+    "remote": "true"
+  }
+}

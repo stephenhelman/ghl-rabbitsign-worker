@@ -1,0 +1,16 @@
+{
+  "name": "ghl-rabbitsign-worker",
+  "version": "0.1.0",
+  "description": "Cloudflare Worker to integrate GoHighLevel and RabbitSign for contracts and signed document tracking.",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "jest --runInBand",
+    "lint": "echo \"(add ESLint later)\""
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "type": "module"
+}
