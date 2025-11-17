@@ -1,7 +1,9 @@
 import { handleRabbitWebhook } from "./signedDocuments";
+import { handlePrefillRequest } from "./prefill/handler.js";
 
 export async function handleRequest(request, env, ctx) {
   const url = new URL(request.url);
+  const method = request.method;
   const { pathname } = url;
 
   if (pathname === "/health") {
@@ -21,10 +23,8 @@ export async function handleRequest(request, env, ctx) {
   }
 
   // prefill endpoint TODO
-  if (pathname === "/prefill" && request.method === "POST") {
-    return new Response("Prefill endpoint not implemented yet", {
-      status: 501,
-    });
+  if (pathname.startsWith("/prefill/") && method === "POST") {
+    return handlePrefillRequest(request, env);
   }
 
   return new Response("Not found", { status: 404 });
