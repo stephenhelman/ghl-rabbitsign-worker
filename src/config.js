@@ -1,4 +1,4 @@
-export default resolveConfig = (env) => {
+export const resolveConfig = (env) => {
   let templateMap = {};
   try {
     if (env.TEMPLATE_CONFIG_JSON) {

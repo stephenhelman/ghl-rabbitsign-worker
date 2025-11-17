@@ -1,3 +1,30 @@
+import { jsonResponse } from "./http";
+
+export const parseBodyForKVData = (body) => {
+  const opportunityId = body.id;
+  const sellerEmail = body.email;
+  const buyerEmail = body.user.email;
+  const contactId = body.customData.contactId;
+
+  if (!opportunityId || !sellerEmail || !buyerEmail || !contactId) {
+    return jsonResponse(
+      {
+        ok: false,
+        error:
+          "Missing opportunity ID, seller email, buyer email, or contact ID",
+      },
+      400
+    );
+  }
+
+  return {
+    opportunityId,
+    sellerEmail,
+    buyerEmail,
+    contactId,
+  };
+};
+
 export async function saveContractMapping(env, folderId, data) {
   const key = `rs:${folderId}`;
   const value = {
@@ -10,7 +37,7 @@ export async function saveContractMapping(env, folderId, data) {
     expirationTtl: 60 * 60 * 24 * 14, // 14 days
   });
 
-  return key;
+  return value;
 }
 
 export async function getContractMapping(env, folderId) {
