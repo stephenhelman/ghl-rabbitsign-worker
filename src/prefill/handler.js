@@ -2,7 +2,6 @@ import { resolveConfig } from "../config.js";
 import { jsonResponse } from "../http.js";
 import { parseBodyForKVData } from "../kvStore.js";
 import { createFolderFromTemplate } from "../rabbitSignClient.js";
-import { formatContractType } from "../util/util.js";
 
 export async function handlePrefillRequest(request, env) {
   const url = new URL(request.url);
@@ -40,8 +39,6 @@ export async function handlePrefillRequest(request, env) {
     "0"
   )}-${String(now.getDate()).padStart(2, "0")}`;
 
-  const typeLabel = formatContractType(type);
-
   // 5. Send the request to create a folder
   let folderResult;
   try {
@@ -49,7 +46,7 @@ export async function handlePrefillRequest(request, env) {
       templateId,
       body,
       date,
-      typeLabel,
+      type,
       rabbitSignSecret,
       rabbitKeyId
     );

@@ -62,13 +62,13 @@ export const createFolderFromTemplate = async (
   templateId,
   body,
   date,
-  typeLabel,
+  type,
   rabbitSignSecret,
   rabbitKeyId
 ) => {
   const path = `/api/v1/folderFromTemplate/${templateId}`;
 
-  const payload = buildRabbitPrefillPayload(body, date, typeLabel);
+  const payload = buildRabbitPrefillPayload(body, date, type);
 
   return rabbitSignAPI(rabbitSignSecret, rabbitKeyId, {
     method: "POST",
