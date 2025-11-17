@@ -1,4 +1,4 @@
-import { jsonResponse } from "./http";
+import { jsonResponse } from "./util/http";
 
 export const parseBodyForKVData = (body) => {
   const opportunityId = body.id;

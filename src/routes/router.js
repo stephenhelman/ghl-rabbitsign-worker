@@ -1,5 +1,5 @@
-import { handleRabbitWebhook } from "./signedDocuments";
-import { handlePrefillRequest } from "./prefill/handler.js";
+import { handleRabbitWebhook } from "../webhook/createSignedDocuments/signedDocuments.js";
+import { handlePrefillRequest } from "../prefill/handler.js";
 
 export async function handleRequest(request, env, ctx) {
   const url = new URL(request.url);

@@ -13,3 +13,8 @@ export const formatContractType = (type) => {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 };
+
+export const splitTitle = (title) => {
+  const [type, propertyAddress] = title.split(/\s*-\s*/);
+  return { type, propertyAddress };
+};

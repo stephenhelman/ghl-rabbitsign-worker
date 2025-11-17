@@ -1,9 +1,11 @@
-import { resolveConfig } from "../config.js";
-import { jsonResponse } from "../http.js";
+import { resolveConfig } from "../config/config.js";
+import { jsonResponse } from "../util/http.js";
 import { parseBodyForKVData, saveContractMapping } from "../kvStore.js";
 import { createFolderFromTemplate } from "../rabbitSignClient.js";
+import { withErrorHandling } from "../util/errors.js";
+import { formatContractType } from "../util/util";
 
-export async function handlePrefillRequest(request, env) {
+const prefillCore = async (request, env) => {
   const url = new URL(request.url);
   const type = (url.pathname.split("/")[2] || "").toLowerCase();
 
@@ -38,6 +40,10 @@ export async function handlePrefillRequest(request, env) {
     2,
     "0"
   )}-${String(now.getDate()).padStart(2, "0")}`;
+  const typeLabel = formatContractType(type);
+  const title = `${typeLabel} - ${
+    body.customData.propertyAddress || "No Address"
+  }`;
 
   // 5. Send the request to create a folder
   let folderResult;
@@ -46,7 +52,7 @@ export async function handlePrefillRequest(request, env) {
       templateId,
       body,
       date,
-      type,
+      title,
       rabbitSignSecret,
       rabbitKeyId
     );
@@ -72,4 +78,9 @@ export async function handlePrefillRequest(request, env) {
     ok: true,
     data: savedKv,
   });
-}
+};
+
+export const handlePrefillRequest = withErrorHandling("prefill", prefillCore, {
+  swallowError: true,
+  successStatus: 200,
+});
