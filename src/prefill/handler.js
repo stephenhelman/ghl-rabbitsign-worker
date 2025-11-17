@@ -8,7 +8,7 @@ export async function handlePrefillRequest(request, env) {
   const url = new URL(request.url);
   const type = (url.pathname.split("/")[2] || "").toLowerCase();
 
-  const { rabbitKeyId, rabbitSignSecret } = resolveConfig(env);
+  const { templateMap, rabbitKeyId, rabbitSignSecret } = resolveConfig(env);
 
   // 1. Confirm the body exists
   let body;
@@ -19,7 +19,7 @@ export async function handlePrefillRequest(request, env) {
   }
 
   // 2. Resolve template ID for this contract type from TEMPLATE_CONFIG_JSON
-  const templateId = config.templateMap[type];
+  const templateId = templateMap[type];
   if (!templateId) {
     return jsonResponse(
       {
