@@ -1,5 +1,5 @@
 {
-  "name": "ghl-rabbitsign-worker",
+  "name": "operation-profit-worker",
   "main": "src/index.js",
   "compatibility_date": "2025-10-29",
   "kv_namespaces": [
