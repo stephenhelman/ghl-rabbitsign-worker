@@ -1,6 +1,6 @@
 import { resolveConfig } from "../config.js";
 import { jsonResponse } from "../http.js";
-import { parseBodyForKVData } from "../kvStore.js";
+import { parseBodyForKVData, saveContractMapping } from "../kvStore.js";
 import { createFolderFromTemplate } from "../rabbitSignClient.js";
 
 export async function handlePrefillRequest(request, env) {
