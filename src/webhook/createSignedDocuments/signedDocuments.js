@@ -1,5 +1,8 @@
 import { resolveConfig } from "../../config/config.js";
-import { getContractMapping, deleteContractMapping } from "./kvStore.js";
+import {
+  getContractMapping,
+  deleteContractMapping,
+} from "../../util/kvStore.js";
 /* import { getFinalPdfUrl } from "./rabbitSignClient.js"; */
 import { createSignedDocumentRecord } from "../../api/ghlClient.js";
 

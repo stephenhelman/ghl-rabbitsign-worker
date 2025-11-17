@@ -1,7 +1,7 @@
 import { resolveConfig } from "../config/config.js";
 import { jsonResponse } from "../util/http.js";
-import { parseBodyForKVData, saveContractMapping } from "../kvStore.js";
-import { createFolderFromTemplate } from "../rabbitSignClient.js";
+import { parseBodyForKVData, saveContractMapping } from "../util/kvStore.js";
+import { createFolderFromTemplate } from "../api/rabbitSignClient.js";
 import { withErrorHandling } from "../util/errors.js";
 import { formatContractType } from "../util/util";
 

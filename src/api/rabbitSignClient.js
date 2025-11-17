@@ -1,7 +1,7 @@
 //this files stores the logic that will be passed to the different handlers
 // Handler/prefill
 // Handler/folderDetails
-import { buildRabbitPrefillPayload } from "./prefill/mapping";
+import { buildRabbitPrefillPayload } from "../prefill/mapping";
 
 // general use rabbit sign API request generator
 const rabbitSignAPI = async (
