@@ -1,6 +1,6 @@
 import { resolveConfig } from "./config.js";
 import { getContractMapping, deleteContractMapping } from "./kvStore.js";
-import { getFinalPdfUrl } from "./rabbitSignClient.js";
+/* import { getFinalPdfUrl } from "./rabbitSignClient.js"; */
 import { createSignedDocumentRecord } from "./ghlClient.js";
 
 export async function handleRabbitWebhook(body, env, ctx) {
