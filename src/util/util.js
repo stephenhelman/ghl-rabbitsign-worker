@@ -18,3 +18,13 @@ export const splitTitle = (title) => {
   const [type, propertyAddress] = title.split(/\s*-\s*/);
   return { type, propertyAddress };
 };
+
+export const confirmBody = async (request) => {
+  let body;
+  try {
+    body = await request.json();
+  } catch (e) {
+    return jsonResponse({ ok: false, error: "Invalid JSON body" }, 400);
+  }
+  return body;
+};
