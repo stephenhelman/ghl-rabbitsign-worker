@@ -1,9 +1,10 @@
-const GHL_BASE_URL = "https://services.leadconnectorhq.com";
+import { jsonResponse } from "../util/http";
 
-async function ghlRequest(env, { method, path, jsonBody }) {
+async function ghlRequest(ghlApiKey, { method, path, jsonBody }) {
+  const GHL_BASE_URL = "https://services.leadconnectorhq.com";
   const url = `${GHL_BASE_URL}${path}`;
   const headers = {
-    Authorization: `Bearer ${env.GHL_API_KEY}`,
+    Authorization: `Bearer ${ghlApiKey}`,
     Version: "2021-07-28",
   };
 
@@ -33,19 +34,81 @@ async function ghlRequest(env, { method, path, jsonBody }) {
     data,
   });
 
-  return { ok: resp.ok, status: resp.status, data };
+  return jsonResponse({ ok: resp.ok, data }, resp.status);
 }
 
-export async function createSignedDocumentRecord(env, payload) {
-  const { signedDocObjectId } = payload.config;
-  const url = `/objects/${signedDocObjectId}/records`;
+export const updateOpportunityStage = async (payload, opportunityId) => {
+  const path = `/opportunities/${opportunityId}`;
 
-  return ghlRequest(env, {
-    method: "POST",
-    path: url,
-    jsonBody: {
-      locationId: payload.config.locationId,
-      properties: payload.properties,
-    },
+  const moveResp = await ghlRequest(env, {
+    method: "PUT",
+    path,
+    jsonBody: payload,
   });
-}
+
+  if (!moveResp.ok) {
+    console.log(
+      `GHL stage update failed ${moveResp.status}: ${JSON.stringify(
+        moveResp.data
+      )}`
+    );
+    return jsonResponse(
+      {
+        ok: false,
+        error: `GHL stage update failed ${moveResp.status}: ${JSON.stringify(
+          moveResp.data
+        )}`,
+      },
+      502
+    );
+  }
+
+  return jsonResponse(
+    { ok: moveResp.ok, data: moveResp.data },
+    moveResp.status
+  );
+};
+
+export const createSignedDocumentRecord = async (
+  env,
+  contactId,
+  folderId,
+  opportunityId,
+  type,
+  title
+) => {
+  //payload mapper
+
+  const [, propertyAddress] = title.split(/\s*-\s*/);
+  const docPayload = {
+    locationId: env.GHL_LOCATION_ID,
+    properties: {
+      signed_documents: title,
+      documenttype: type,
+      signedpdfurl: downloadUrl,
+      rabbitfolderid: folderId,
+      property_address: propertyAddress,
+      opportunityid: opportunityId,
+      contactid: contactId,
+      signed_pdf: "",
+    },
+  };
+
+  const objectKey = env.SIGNED_DOCUMENT_OBJECT_KEY;
+
+  const path = `/objects/${encodeURIComponent(objectKey)}/records`;
+
+  const result = await ghlRequest(env, {
+    method: "POST",
+    path,
+    jsonBody: docPayload,
+  });
+
+  return jsonResponse(
+    {
+      ok: result.ok,
+      data: result.data,
+    },
+    result.status
+  );
+};

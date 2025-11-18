@@ -15,5 +15,7 @@ export const resolveConfig = (env) => {
     locationId: env.GHL_LOCATION_ID,
     templateMap,
     //TODO - other sensitive IDs
+    contractSigned: env.STAGE_CONTRACT_SIGNED,
+    disposition: env.STAGE_DISPO,
   };
 };
