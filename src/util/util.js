@@ -1,3 +1,5 @@
+import { jsonResponse } from "./http";
+
 export const formatContractType = (type) => {
   if (!type) return "";
 
@@ -27,4 +29,21 @@ export const confirmBody = async (request) => {
     return jsonResponse({ ok: false, error: "Invalid JSON body" }, 400);
   }
   return body;
+};
+
+export const parseHookRequest = async (hook) => {
+  const { folderId, eventName, signerEmail } = hook;
+
+  if (!folderIdFromHook || !eventName || !signerEmail) {
+    console.log("Missing folderId, eventName, or signerEmail in webhook");
+    return jsonResponse(
+      {
+        ok: false,
+        error: "Missing folderId, eventName, or signerEmail in webhook",
+      },
+      400
+    );
+  }
+
+  return { folderId, eventName, signerEmail };
 };

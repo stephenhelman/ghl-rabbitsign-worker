@@ -37,10 +37,14 @@ async function ghlRequest(ghlApiKey, { method, path, jsonBody }) {
   return jsonResponse({ ok: resp.ok, data }, resp.status);
 }
 
-export const updateOpportunityStage = async (payload, opportunityId) => {
+export const updateOpportunityStage = async (
+  payload,
+  opportunityId,
+  ghlApiKey
+) => {
   const path = `/opportunities/${opportunityId}`;
 
-  const moveResp = await ghlRequest(env, {
+  const moveResp = await ghlRequest(ghlApiKey, {
     method: "PUT",
     path,
     jsonBody: payload,

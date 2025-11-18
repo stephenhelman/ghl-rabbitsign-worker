@@ -1,34 +1,65 @@
 import { updateOpportunityStage } from "../api/ghlClient";
+import { resolveConfig } from "../config/config";
 import { withErrorHandling } from "../util/errors";
 import { jsonResponse } from "../util/http";
+import { getContractMapping } from "../util/kvStore";
+import { confirmBody, parseHookRequest } from "../util/util";
 import { buildUpdateOpportunityPayload } from "./mapping";
+import { runStep } from "./flowUtils";
 
 //client - hosts the api call logic
 //handlers - calls the api functions
 //mapping - builds the payloads for the handlers to use
+const rabbitWebhookCore = async (request, env) => {
+  const { ghlApiKey, locationId, contractSigned, disposition, pipelineId } =
+    resolveConfig(env);
 
-const updateOpportunityCore = async (pipelineId, stageId, opportunityId) => {
-  if (!opportunityId || !stageId || !pipelineId) return false;
+  const body = confirmBody(request);
+  const { folderId, eventName, signerEmail } = parseHookRequest(body);
 
-  const payload = buildUpdateOpportunityPayload(pipelineId, stageId);
-
-  let updateResponse;
-  try {
-    updateResponse = await updateOpportunityStage(payload, opportunityId);
-  } catch (err) {
-    console.log("GHL update opportunity failed", err);
-    return jsonResponse({ ok: false, error: e.message }, e.status);
+  if (eventName !== "SIGNER_SIGNED") {
+    console.log("Ignoring webhook: eventName not SIGNER_SIGNED");
+    return jsonResponse(
+      {
+        ok: true,
+        error: "Ignoring webhook: eventName not SIGNER_SIGNED",
+      },
+      200
+    );
   }
 
-  return jsonResponse(
-    { ok: true, data: updateResponse },
-    updateResponse.status
-  );
+  const signerLower = signerEmail.toLowerCase().trim();
+
+  const mapping = await getContractMapping(env, folderId);
+  if (!mapping) {
+    console.warn("No KV mapping for folderId", folderId);
+    return jsonResponse({ ok: true, skipped: true, reason: "No mapping" }, 200);
+  }
+
+  const { opportunityId, sellerEmail, buyerEmail, contactId, type, title } =
+    mapping;
+
+  if (sellerEmail && signerLower === sellerEmail) {
+    const payload = buildUpdateOpportunityPayload(pipelineId, contractSigned);
+    return await runStep(
+      "seller-signed-update",
+      updateOpportunityStage(payload, opportunityId, ghlApiKey)
+    );
+  }
+  if (buyerEmail && signerLower === buyerEmail) {
+    const payload = buildUpdateOpportunityPayload(
+      pipelineId,
+      disposition,
+      ghlApiKey
+    );
+    await runStep("all-parties-signed-update", updateOpportunityStage(payload));
+    return;
+  }
 };
 
-export const handleUpdateOpportunity = withErrorHandling(
+export const handleRabbitWebhook = withErrorHandling(
   "/webhook/rabbitsign",
-  updateOpportunityCore,
+  rabbitWebhookCore,
   {
     swallowError: true,
     successStatus: 200,
