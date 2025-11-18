@@ -1,4 +1,3 @@
-import { handleRabbitWebhook } from "../webhook/createSignedDocuments/signedDocuments.js";
 import { handlePrefillRequest } from "../prefill/handler.js";
 
 export async function handleRequest(request, env, ctx) {
@@ -17,10 +16,10 @@ export async function handleRequest(request, env, ctx) {
   }
 
   // RabbitSign webhook endpoint TODO
-  if (pathname === "/webhook/rabbitsign" && request.method === "POST") {
+  /*   if (pathname === "/webhook/rabbitsign" && request.method === "POST") {
     const body = await request.json();
     return handleRabbitWebhook(body, env, ctx);
-  }
+  } */
 
   // prefill endpoint TODO
   if (pathname.startsWith("/prefill/") && method === "POST") {
