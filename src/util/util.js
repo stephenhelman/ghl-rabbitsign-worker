@@ -34,7 +34,7 @@ export const confirmBody = async (request) => {
 export const parseHookRequest = async (hook) => {
   const { folderId, eventName, signerEmail } = hook;
 
-  if (!folderIdFromHook || !eventName || !signerEmail) {
+  if (!folderId || !eventName || !signerEmail) {
     console.log("Missing folderId, eventName, or signerEmail in webhook");
     return jsonResponse(
       {

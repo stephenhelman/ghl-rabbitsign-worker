@@ -12,7 +12,7 @@ const prefillCore = async (request, env) => {
   const { templateMap, rabbitKeyId, rabbitSignSecret } = resolveConfig(env);
 
   // 1. Confirm the body exists
-  const body = confirmBody(request);
+  const body = await confirmBody(request);
 
   // 2. Resolve template ID for this contract type from TEMPLATE_CONFIG_JSON
   const templateId = templateMap[type];
