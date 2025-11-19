@@ -1,6 +1,6 @@
 import { jsonResponse } from "../util/http";
 
-async function ghlRequest(ghlApiKey, { method, path, jsonBody }) {
+export async function ghlRequest(ghlApiKey, { method, path, jsonBody }) {
   const GHL_BASE_URL = "https://services.leadconnectorhq.com";
   const url = `${GHL_BASE_URL}${path}`;
   const headers = {

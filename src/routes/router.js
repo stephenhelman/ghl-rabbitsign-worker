@@ -25,5 +25,9 @@ export async function handleRequest(request, env, ctx) {
     return handlePrefillRequest(request, env);
   }
 
+  if (pathname === "/test-worker") {
+    return handleWorkerTest(request, env);
+  }
+
   return new Response("Not found", { status: 404 });
 }
