@@ -77,7 +77,11 @@ export const createFolderFromTemplate = async (
   });
 };
 
-export const getFolderDetails = async (env, folderId) => {
+export const getFolderDetails = async (
+  rabbitSignSecret,
+  rabbitKeyId,
+  folderId
+) => {
   if (!folderId) {
     throw new Error("folderId is required to fetch folder details");
   }

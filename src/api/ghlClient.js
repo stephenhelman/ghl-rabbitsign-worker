@@ -1,6 +1,6 @@
 import { jsonResponse } from "../util/http";
 
-async function ghlRequest(ghlApiKey, { method, path, jsonBody }) {
+export async function ghlRequest(ghlApiKey, { method, path, jsonBody }) {
   const GHL_BASE_URL = "https://services.leadconnectorhq.com";
   const url = `${GHL_BASE_URL}${path}`;
   const headers = {
@@ -37,10 +37,14 @@ async function ghlRequest(ghlApiKey, { method, path, jsonBody }) {
   return jsonResponse({ ok: resp.ok, data }, resp.status);
 }
 
-export const updateOpportunityStage = async (payload, opportunityId) => {
+export const updateOpportunityStage = async (
+  payload,
+  opportunityId,
+  ghlApiKey
+) => {
   const path = `/opportunities/${opportunityId}`;
 
-  const moveResp = await ghlRequest(env, {
+  const moveResp = await ghlRequest(ghlApiKey, {
     method: "PUT",
     path,
     jsonBody: payload,
@@ -70,7 +74,7 @@ export const updateOpportunityStage = async (payload, opportunityId) => {
 };
 
 export const createSignedDocumentRecord = async (
-  env,
+  locationId,
   contactId,
   folderId,
   opportunityId,
@@ -81,7 +85,7 @@ export const createSignedDocumentRecord = async (
 
   const [, propertyAddress] = title.split(/\s*-\s*/);
   const docPayload = {
-    locationId: env.GHL_LOCATION_ID,
+    locationId: locationId,
     properties: {
       signed_documents: title,
       documenttype: type,
