@@ -1,5 +1,6 @@
 import { handlePrefillRequest } from "../prefill/handler.js";
 import { handleRabbitWebhook } from "../webhook/handler.js";
+import { handleWorkerTest } from "../test/handler.js";
 
 export async function handleRequest(request, env, ctx) {
   const url = new URL(request.url);
