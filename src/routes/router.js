@@ -1,4 +1,5 @@
 import { handlePrefillRequest } from "../prefill/handler.js";
+import { handleRabbitWebhook } from "../webhook/handler.js";
 
 export async function handleRequest(request, env, ctx) {
   const url = new URL(request.url);
@@ -15,11 +16,9 @@ export async function handleRequest(request, env, ctx) {
     );
   }
 
-  // RabbitSign webhook endpoint TODO
-  /*   if (pathname === "/webhook/rabbitsign" && request.method === "POST") {
-    const body = await request.json();
-    return handleRabbitWebhook(body, env, ctx);
-  } */
+  if (pathname === "/webhook/rabbitsign" && request.method === "POST") {
+    return handleRabbitWebhook(request, env, ctx);
+  }
 
   // prefill endpoint TODO
   if (pathname.startsWith("/prefill/") && method === "POST") {

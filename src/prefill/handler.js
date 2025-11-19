@@ -3,7 +3,7 @@ import { jsonResponse } from "../util/http.js";
 import { parseBodyForKVData, saveContractMapping } from "../util/kvStore.js";
 import { createFolderFromTemplate } from "../api/rabbitSignClient.js";
 import { withErrorHandling } from "../util/errors.js";
-import { formatContractType } from "../util/util";
+import { confirmBody, formatContractType } from "../util/util";
 
 const prefillCore = async (request, env) => {
   const url = new URL(request.url);
@@ -12,12 +12,7 @@ const prefillCore = async (request, env) => {
   const { templateMap, rabbitKeyId, rabbitSignSecret } = resolveConfig(env);
 
   // 1. Confirm the body exists
-  let body;
-  try {
-    body = await request.json();
-  } catch (e) {
-    return jsonResponse({ ok: false, error: "Invalid JSON body" }, 400);
-  }
+  const body = confirmBody(request);
 
   // 2. Resolve template ID for this contract type from TEMPLATE_CONFIG_JSON
   const templateId = templateMap[type];

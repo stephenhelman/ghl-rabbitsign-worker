@@ -74,7 +74,7 @@ export const updateOpportunityStage = async (
 };
 
 export const createSignedDocumentRecord = async (
-  env,
+  locationId,
   contactId,
   folderId,
   opportunityId,
@@ -85,7 +85,7 @@ export const createSignedDocumentRecord = async (
 
   const [, propertyAddress] = title.split(/\s*-\s*/);
   const docPayload = {
-    locationId: env.GHL_LOCATION_ID,
+    locationId: locationId,
     properties: {
       signed_documents: title,
       documenttype: type,
