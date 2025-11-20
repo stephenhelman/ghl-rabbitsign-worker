@@ -1,6 +1,5 @@
 import { handlePrefillRequest } from "../prefill/handler.js";
 import { handleRabbitWebhook } from "../webhook/handler.js";
-import { handleWorkerTest } from "../test/handler.js";
 
 export async function handleRequest(request, env, ctx) {
   const url = new URL(request.url);
@@ -24,10 +23,6 @@ export async function handleRequest(request, env, ctx) {
   // prefill endpoint TODO
   if (pathname.startsWith("/prefill/") && method === "POST") {
     return handlePrefillRequest(request, env);
-  }
-
-  if (pathname === "/test-worker") {
-    return handleWorkerTest(request, env);
   }
 
   return new Response("Not found", { status: 404 });
