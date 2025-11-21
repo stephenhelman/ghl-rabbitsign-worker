@@ -20,6 +20,7 @@ export const mapGhlToCtx = (ghlPayload, type) => {
     },
 
     property: {
+      propertyFullAddress: `${ghlPayload.address1} ${ghlPayload.city}, ${ghlPayload.state} ${ghlPayload.postal_code}`,
       propertyAddress: ghlPayload.address1,
       propertyCity: ghlPayload.city,
       propertyState: ghlPayload.state,
