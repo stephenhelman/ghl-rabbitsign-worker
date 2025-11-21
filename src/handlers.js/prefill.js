@@ -1,4 +1,3 @@
-// src/handlers/prefill.js
 import { mapGhlToCtx } from "../mapping.js";
 import {
   withErrorHandling,

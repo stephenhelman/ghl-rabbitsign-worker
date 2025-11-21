@@ -10,7 +10,7 @@ export const jsonResponse = (data, status = 200) => {
 export const withErrorHandling = (handler) => {
   return async (request, env, type) => {
     try {
-      return await handler(request, env, type);
+      return await handler(request, env, (type = null));
     } catch (err) {
       console.error("[worker error]", err);
       return jsonResponse(
@@ -26,12 +26,11 @@ export const withErrorHandling = (handler) => {
 
 export const forwardJsonToBackend = async ({
   env,
-  path, // e.g. `/tenant/${TENANT_ID}/prefill`
+  path,
   body,
   method = "POST",
 }) => {
   const url = `${env.BACKEND_URL}${path}`;
-  console.log(url);
 
   const resp = await fetch(url, {
     method,
