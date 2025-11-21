@@ -1,6 +1,6 @@
 export const mapGhlToCtx = (ghlPayload, type) => {
   const customData = ghlPayload.customData; // all data custom to a deal
-  const userData = ghlPayload.userData;
+  const userData = ghlPayload.user;
 
   return {
     contractType: type,

@@ -12,6 +12,7 @@ export const handleRabbitsignWebhook = withErrorHandling(
     }
 
     const body = await request.json();
+    console.log(body);
 
     const path = `/tenant/${encodeURIComponent(
       env.TENANT_ID
