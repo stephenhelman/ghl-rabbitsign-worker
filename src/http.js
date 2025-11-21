@@ -10,7 +10,7 @@ export const jsonResponse = (data, status = 200) => {
 export const withErrorHandling = (handler) => {
   return async (request, env, type) => {
     try {
-      return await handler(request, env, (type = null));
+      return await handler(request, env, type);
     } catch (err) {
       console.error("[worker error]", err);
       return jsonResponse(
