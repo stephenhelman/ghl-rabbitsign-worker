@@ -1,7 +1,7 @@
 {
   "name": "ghl-rabbitsign-worker",
-  "version": "0.1.0",
-  "description": "Cloudflare Worker to integrate GoHighLevel and RabbitSign for contracts and signed document tracking.",
+  "version": "1.0.0",
+  "description": "Cloudflare worker that acts as a middleman between an Express server and different software. Current capabilities, E-sign and GHL CRM.",
   "main": "src/index.js",
   "scripts": {
     "dev": "wrangler dev",
