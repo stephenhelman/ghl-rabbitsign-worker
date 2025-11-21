@@ -6,6 +6,7 @@ dist
 # Local editor stuff
 .vscode
 .idea
+senderFields.js
 
 # Local env/secrets
 .dev.vars
