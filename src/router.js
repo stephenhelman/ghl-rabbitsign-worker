@@ -1,24 +1,35 @@
-import { handleHealth } from "./handlers.js/health.js";
 import { handlePrefill } from "./handlers.js/prefill.js";
 import { handleRabbitsignWebhook } from "./handlers.js/webhook.js";
+import { jsonResponse } from "./http.js";
 
-export const handleRequest = async (request, env) => {
+export const handleRequest = async (request, env, ctx) => {
   const url = new URL(request.url);
-  const pathname = url.pathname;
-  const type = pathname.split("/prefill/")[1];
+  const { pathname } = url;
   const method = request.method.toUpperCase();
 
-  if (method === "GET" && pathname === "/health") {
-    return handleHealth(request, env);
+  const segments = pathname.split("/").filter(Boolean);
+  // e.g. /tenant/operation_profit/prefill => ["tenant","operation_profit","prefill"]
+
+  if (segments[0] === "tenant" && segments.length >= 3) {
+    const tenantId = segments[1];
+    const action = segments[2];
+    const extendedEnv = { ...env, TENANT_ID: tenantId };
+
+    if (method === "POST" && action === "prefill") {
+      const contractType = segments[3];
+      return handlePrefill(request, extendedEnv, contractType);
+    }
+
+    if (
+      method === "POST" &&
+      action === "webhooks" &&
+      segments[3] === "rabbitsign"
+    ) {
+      return handleRabbitsignWebhook(request, extendedEnv, ctx);
+    }
+
+    return jsonResponse({ ok: false, error: "Unknown tenant route" }, 404);
   }
 
-  if (method === "POST" && pathname.startsWith("/prefill/")) {
-    return handlePrefill(request, env, type);
-  }
-
-  if (method === "POST" && pathname === "/webhooks/rabbitsign") {
-    return handleRabbitsignWebhook(request, env);
-  }
-
-  return new Response("Not found", { status: 404 });
+  return jsonResponse({ ok: false, error: "Not found" }, 404);
 };
