@@ -6,7 +6,7 @@ import {
 } from "../http.js";
 
 export const handlePrefill = withErrorHandling(
-  async (request, tenantId, contractTypeFromPath) => {
+  async (request, env, contractTypeFromPath, tenantId) => {
     if (request.method !== "POST") {
       return jsonResponse({ ok: false, error: "Method not allowed" }, 405);
     }
@@ -16,7 +16,7 @@ export const handlePrefill = withErrorHandling(
     const path = `/tenant/${encodeURIComponent(tenantId)}/prefill`;
 
     return forwardJsonToBackend({
-      tenantId,
+      env,
       path,
       body: { ...rawBody, contractTypeFromPath },
     });
