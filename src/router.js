@@ -13,11 +13,10 @@ export const handleRequest = async (request, env, ctx) => {
   if (segments[0] === "tenant" && segments.length >= 3) {
     const tenantId = segments[1];
     const action = segments[2];
-    const extendedEnv = { ...env, TENANT_ID: tenantId };
 
     if (method === "POST" && action === "prefill") {
       const contractType = segments[3];
-      return handlePrefill(request, extendedEnv, contractType);
+      return handlePrefill(request, tenantId, contractType);
     }
 
     if (
@@ -25,7 +24,7 @@ export const handleRequest = async (request, env, ctx) => {
       action === "webhooks" &&
       segments[3] === "rabbitsign"
     ) {
-      return handleRabbitsignWebhook(request, extendedEnv, ctx);
+      return handleRabbitsignWebhook(request, tenantId, ctx);
     }
 
     return jsonResponse({ ok: false, error: "Unknown tenant route" }, 404);

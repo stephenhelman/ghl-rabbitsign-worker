@@ -6,7 +6,7 @@ import {
 } from "../http.js";
 
 export const handleRabbitsignWebhook = withErrorHandling(
-  async (request, env) => {
+  async (request, tenantId) => {
     if (request.method !== "POST") {
       return jsonResponse({ ok: false, error: "Method not allowed" }, 405);
     }
@@ -35,12 +35,10 @@ export const handleRabbitsignWebhook = withErrorHandling(
       body = { rawBody: rawText, contentType };
     }
 
-    const path = `/tenant/${encodeURIComponent(
-      env.TENANT_ID
-    )}/webhooks/rabbitsign`;
+    const path = `/tenant/${encodeURIComponent(tenantId)}/webhooks/rabbitsign`;
 
     return forwardJsonToBackend({
-      env,
+      tenantId,
       path,
       body,
     });

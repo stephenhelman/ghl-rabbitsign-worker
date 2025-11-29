@@ -8,9 +8,9 @@ export const jsonResponse = (data, status = 200) => {
 };
 
 export const withErrorHandling = (handler) => {
-  return async (request, env, type) => {
+  return async (request, tenantId, type) => {
     try {
-      return await handler(request, env, type);
+      return await handler(request, tenantId, type);
     } catch (err) {
       console.error("[worker error]", err);
       return jsonResponse(
