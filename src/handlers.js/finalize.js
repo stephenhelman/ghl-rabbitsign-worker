@@ -13,7 +13,7 @@ export const handleFinalize = withErrorHandling(
 
     const rawBody = await request.json();
 
-    const path = `/tenant/${encodeURIComponent(tenantId)}/prefill`;
+    const path = `/tenant/${encodeURIComponent(tenantId)}/finalize`;
 
     return forwardJsonToBackend({
       env,
