@@ -27,6 +27,10 @@ export const handleRequest = async (request, env, ctx) => {
       return handleRabbitsignWebhook(request, env, ctx, tenantId);
     }
 
+    if (method === "POST" && action === "finalize") {
+      return;
+    }
+
     return jsonResponse({ ok: false, error: "Unknown tenant route" }, 404);
   }
 
