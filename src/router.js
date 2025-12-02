@@ -1,5 +1,6 @@
 import { handlePrefill } from "./handlers.js/prefill.js";
 import { handleRabbitsignWebhook } from "./handlers.js/webhook.js";
+import { handleFinalize } from "./handlers.js/finalize.js";
 import { jsonResponse } from "./http.js";
 
 export const handleRequest = async (request, env, ctx) => {
@@ -28,7 +29,7 @@ export const handleRequest = async (request, env, ctx) => {
     }
 
     if (method === "POST" && action === "finalize") {
-      return;
+      return handleFinalize(request, env, ctx, tenantId);
     }
 
     return jsonResponse({ ok: false, error: "Unknown tenant route" }, 404);
